@@ -31,6 +31,7 @@ exports.setCards = functions.https.onCall(async (data) => {
   .get();
 //test change
   //test change 2
+  //test change 3
   for(doc of query1.docs) {
     console.log("QUERY 1: " + doc.id);
     if(!liveWhiteList.includes(doc.id)) {
