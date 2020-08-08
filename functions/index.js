@@ -29,7 +29,7 @@ exports.setCards = functions.https.onCall(async (data) => {
   .orderBy("value")
   .limit(amtPerUser)
   .get();
-
+//test change
   for(doc of query1.docs) {
     console.log("QUERY 1: " + doc.id);
     if(!liveWhiteList.includes(doc.id)) {
