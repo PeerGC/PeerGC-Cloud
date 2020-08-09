@@ -21,6 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="83244dcf-c763-40a4-b023-0e2c9b6327b9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.github/workflows/PushToFirebaseDEV.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/PushToFirebaseDEV.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/firebase.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/firebase.json" beforeDir="false" afterPath="$PROJECT_DIR$/firebase.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,10 +42,13 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.github/workflows" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="Z:\AJ\Documents\Cloud-Functions\.github\workflows" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="Z:\AJ\Documents\Cloud-Functions\.github\workflows" />
     </key>
@@ -73,5 +78,23 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1257" height="265" key="GridCell.Tab.0.bottom" timestamp="1596935949839">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1257" height="265" key="GridCell.Tab.0.bottom/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1596935949839" />
+    <state width="1257" height="265" key="GridCell.Tab.0.center" timestamp="1596935949839">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1257" height="265" key="GridCell.Tab.0.center/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1596935949839" />
+    <state width="1257" height="265" key="GridCell.Tab.0.left" timestamp="1596935949838">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1257" height="265" key="GridCell.Tab.0.left/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1596935949838" />
+    <state width="1257" height="265" key="GridCell.Tab.0.right" timestamp="1596935949839">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1257" height="265" key="GridCell.Tab.0.right/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1596935949839" />
   </component>
 </project>
