@@ -17,6 +17,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Install Dependencies
+        working-directory: functions
         run: npm install
       - name: Build
         run: npm build functions
@@ -37,8 +38,6 @@ jobs:
         with:
           name: functions
           path: functions
-      - name: Install Dependencies
-        run: npm install firebase-functions
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
