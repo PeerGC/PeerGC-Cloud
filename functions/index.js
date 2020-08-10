@@ -1,8 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const https = require('https');
-const fs = require('fs');
-const util = require('util');
+const toString = require('stream-to-string')
 const clone = require('rfdc')();
 admin.initializeApp();
 
@@ -10,10 +9,8 @@ exports.matchingAlgo = functions.https.onCall(async (data, context) => {
 
   //File Operations
   await fetchFile()
-  console.log("check 0");
   const scenariosFromFile = readFile()
   //End File Operations
-  console.log("file read 2");
 
   const uid = context.auth.uid;
   if (uid == null) {
@@ -85,15 +82,21 @@ exports.matchingAlgo = functions.https.onCall(async (data, context) => {
 
 });
 
-async function fetchFile() {
-  const fileWriteStream = fs.createWriteStream("PeerGC-Matching-Algorithm-Matrix.csv");
+async function fetchAndReadAlgorithmMatrix() {
   return new Promise ((resolve, reject) => {
     https.get("https://docs.google.com/spreadsheets/d/1gndunHC6Ch7F9K_NkhE6OhzpEG9zr0eiIoHjuPsqwOQ/gviz/tq?tqx=out:csv&sheet=PeerGC-Matching-Algorithm.CONFIG", async function (response) {
-      response.pipe(fileWriteStream);
-      fileWriteStream.on('finish', function() {
-        fileWriteStream.close();
-        resolve();
-      });
+      toString(response, function (err, msg) {
+        let lines = msg.split("\n");
+        let scenariosFromFile = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          let line = lines[i];
+          let lineSplit = line.replace(/"/g, "").split(",");
+          scenariosFromFile.push(lineSplit);
+        }
+
+        resolve(scenariosFromFile);
+      })
     });
   });
 }
@@ -127,3 +130,6 @@ function passesChecks(keys, values, document) {
   }
   return checksPassed == keys.length;
 }
+
+fetchAndReadAlgorithmMatrix().then((data) => {console.log(data)}).catch(() => {console.log("ERROR!")})
+
