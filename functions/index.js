@@ -1,5 +1,4 @@
 const functions = require('firebase-functions');
-const messaging = require('firebase-messaging')
 const admin = require('firebase-admin');
 const https = require('https');
 const toString = require('stream-to-string')
@@ -106,38 +105,16 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
 
 });
 
-exports.push = functions.https.onCall(async (data, context) => {
-  // pushNotification("fL6LkZovjEq5lJpGdvnTjy:APA91bGJooLh4rhXLgDxijpNKj9HDFDIkbn4o1KI6-FvUA9Z8AjUrTmrWXhv7iM711T3hc2aTUJ6pWPWpHgfgb90Rl8Xqj-X0eRc_IQFY6epFgRCnwjHY7gfZEur_Cqdrx-TziIxzZ6r", "Test Push Notif", "Test Message Body.").then((result) => {console.log(result)}).catch((error) => {console.log(error)})
-
-  var message = {
-    notification: {
-      title: "You have a new service request",
-      body: "this is the main body"
-    },
-    data: {
-      score: '850',
-      time: '2:45'
-    }
-  };
-
-  return admin.messaging().sendToDevice("cmu32orCrkMmpJoCQNn_Jz:APA91bEU-IsGt4Bwfd1n-7mJ3qzbyEizMBVBeCGz-HaFx6QfBXw2qCgt-MZMsXGIstB3ht1WMsD0usVe0i4KL7FGMs171ekpgeGCtkOrXpQK6pJyP5SFzKhW83jvkFfKE_KeQ94vlgeK", message)
-      .then(function (response) {
-        console.log("Successfully sent message:", response);
-      })
-      .catch(function (error) {
-        console.log("Error sending message:", error);
-      });
-});
-
 async function pushNotification(token, title, body) {
   const message = {
+    token: token,
     notification: {
       title: title,
       body: body
     }
   };
 
-  return admin.messaging.sendToDevice(token, message);
+  return admin.messaging().send(message)
 }
 
 async function match(studentDoc, mentorBundle, usersRef) {
@@ -177,3 +154,5 @@ async function fetchAndReadAlgorithmMatrix() {
     });
   });
 }
+
+pushNotification("cmu32orCrkMmpJoCQNn_Jz:APA91bEU-IsGt4Bwfd1n-7mJ3qzbyEizMBVBeCGz-HaFx6QfBXw2qCgt-MZMsXGIstB3ht1WMsD0usVe0i4KL7FGMs171ekpgeGCtkOrXpQK6pJyP5SFzKhW83jvkFfKE_KeQ94vlgeK", "Test Push Notif", "Test Message Body.").then((result) => {console.log(result)}).catch((error) => {console.log(error)})
