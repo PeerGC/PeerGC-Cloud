@@ -7,11 +7,13 @@ admin.initializeApp();
 
 exports.matchingAlgo = functions.https.onCall(async (data, context) => {
 
+  console.log("function called");
+
   //File Operations
   const scenariosFromFile = await fetchAndReadAlgorithmMatrix();
   //End File Operations
 
-  const uid = data.uid
+  const uid = context.auth.uid; //LOCAL DEV: const uid = data.uid; PROD: const uid = context.auth.uid;
   if (uid == null) {
     console.log("User not authenticated.");
     return;
