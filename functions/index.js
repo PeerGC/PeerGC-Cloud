@@ -5,7 +5,7 @@ const fs = require('fs');
 const clone = require('rfdc')();
 admin.initializeApp();
 
-exports.setCards = functions.https.onCall(async (data, context) => {
+exports.matchingAlgo = functions.https.onCall(async (data, context) => {
   const uid = context.auth.uid;
   if (uid == null) {
     console.log("User not authenticated.");
