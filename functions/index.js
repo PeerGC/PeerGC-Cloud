@@ -1,9 +1,10 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const https = require("https");
-const toString = require("stream-to-string")
+const toString = require("stream-to-string");
 const {SecretManagerServiceClient} = require("@google-cloud/secret-manager");
 const clone = require("rfdc")();
+const nodemailer = require("nodemailer");
 admin.initializeApp();
 
 exports.matchStudentToMentors = functions.https.onCall(async (data, context) => {
@@ -105,10 +106,6 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
 
 });
 
-exports.email = functions.https.onCall(async (data, context) => {
-  await emailNotification();
-});
-
 async function pushNotification(token, title, body) {
   const message = {
     token: token,
@@ -121,16 +118,38 @@ async function pushNotification(token, title, body) {
   return admin.messaging().send(message)
 }
 
-async function emailNotification() {
+async function emailNotification(to, subject, body) {
+  const email = "peergc.notifications@gmail.com"
+  //Fetch Password From Google Cloud Secrets
   const client = new SecretManagerServiceClient();
-
   const [version] = await client.accessSecretVersion({
-    name: "NOTIFICATIONS-EMAIL-PASSWORD",
+    name: "projects/loremipsum-ab1fd/secrets/NOTIFICATIONS-EMAIL-PASSWORD/versions/latest"
+  });
+  const password = version.payload.data.toString();
+  //End Fetch Password From Google Cloud Secrets
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: email,
+      pass: password
+    }
   });
 
-  const payload = version.payload.data.toString();
+  const mailOptions = {
+    from: email,
+    to: to,
+    subject: subject,
+    text: body
+  };
 
-  console.log("Payload: " + payload);
+  await transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
 }
 
 async function match(studentDoc, mentorBundle, usersRef) {
@@ -171,22 +190,4 @@ async function fetchAndReadAlgorithmMatrix() {
   });
 }
 
-// emailNotification().then(() => {console.log("success")}).catch(() => {console.log("error")})
-
-// Instantiates a client
-const client = new SecretManagerServiceClient();
-
-async function accessSecretVersion() {
-  const [version] = await client.accessSecretVersion({
-    name: "projects/494119397893/secrets/NOTIFICATIONS-EMAIL-PASSWORD/versions/latest"
-  });
-
-  // Extract the payload as a string.
-  const payload = version.payload.data.toString();
-
-  // WARNING: Do not print the secret in a production environment - this
-  // snippet is showing how to access the secret material.
-  console.info(`Payload: ${payload}`);
-}
-
-accessSecretVersion().then(() => {console.log("success")}).catch(() => {console.log("error")});
+emailNotification("ajradik@gmail.com", "Test Email From PeerGC", "Thanks for reading!").then(() => {console.log("success")}).catch(() => {console.log("error")})
