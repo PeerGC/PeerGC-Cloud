@@ -1,7 +1,7 @@
 "MENTOR_KEY[S]","MENTOR_VALUE[S]","STUDENT_KEY[S]","STUDENT_VALUE[S]","SCENARIO_WEIGHT"
 "whichStudentType","financiallyUnderprivileged","financialLevel","belowAverage","1"
 "whichStudentType","lgbtq","lgbtq","yes","1"
-"whichStudentType","womenInStem","gender && interest","female || nonBinary || other & mathComputerScience || sciences","1"
+"whichStudentType","womenInStem","gender && interest","female || nonBinary || other && mathComputerScience || sciences","1"
 "whichStudentType","similarCultureReligion","N/A","N/A","1"
 "whichStudentType","similarRacialBackground","race","$MENTOR race","1"
 "gender","$MENTOR gender","gender","$MENTOR gender","1"
