@@ -1,8 +1,9 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-const https = require('https');
-const toString = require('stream-to-string')
-const clone = require('rfdc')();
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const https = require("https");
+const toString = require("stream-to-string")
+const {SecretManagerServiceClient} = require("@google-cloud/secret-manager");
+const clone = require("rfdc")();
 admin.initializeApp();
 
 exports.matchStudentToMentors = functions.https.onCall(async (data, context) => {
@@ -16,7 +17,6 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
     console.log("User not authenticated.");
     return;
   }
-
 
   const usersRef = admin.firestore().collection("users");
   const studentRef = usersRef.doc(uid);
@@ -105,6 +105,10 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
 
 });
 
+exports.email = functions.https.onCall(async (data, context) => {
+  await emailNotification();
+});
+
 async function pushNotification(token, title, body) {
   const message = {
     token: token,
@@ -115,6 +119,18 @@ async function pushNotification(token, title, body) {
   };
 
   return admin.messaging().send(message)
+}
+
+async function emailNotification() {
+  const client = new SecretManagerServiceClient();
+
+  const [version] = await client.accessSecretVersion({
+    name: "NOTIFICATIONS-EMAIL-PASSWORD",
+  });
+
+  const payload = version.payload.data.toString();
+
+  console.log("Payload: " + payload);
 }
 
 async function match(studentDoc, mentorBundle, usersRef) {
@@ -155,4 +171,22 @@ async function fetchAndReadAlgorithmMatrix() {
   });
 }
 
-pushNotification("cmu32orCrkMmpJoCQNn_Jz:APA91bEU-IsGt4Bwfd1n-7mJ3qzbyEizMBVBeCGz-HaFx6QfBXw2qCgt-MZMsXGIstB3ht1WMsD0usVe0i4KL7FGMs171ekpgeGCtkOrXpQK6pJyP5SFzKhW83jvkFfKE_KeQ94vlgeK", "Test Push Notif", "Test Message Body.").then((result) => {console.log(result)}).catch((error) => {console.log(error)})
+// emailNotification().then(() => {console.log("success")}).catch(() => {console.log("error")})
+
+// Instantiates a client
+const client = new SecretManagerServiceClient();
+
+async function accessSecretVersion() {
+  const [version] = await client.accessSecretVersion({
+    name: "projects/494119397893/secrets/NOTIFICATIONS-EMAIL-PASSWORD/versions/latest"
+  });
+
+  // Extract the payload as a string.
+  const payload = version.payload.data.toString();
+
+  // WARNING: Do not print the secret in a production environment - this
+  // snippet is showing how to access the secret material.
+  console.info(`Payload: ${payload}`);
+}
+
+accessSecretVersion().then(() => {console.log("success")}).catch(() => {console.log("error")});
