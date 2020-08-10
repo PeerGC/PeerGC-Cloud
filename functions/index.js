@@ -1,3 +1,4 @@
+//Start Globals
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const https = require("https");
@@ -6,7 +7,9 @@ const {SecretManagerServiceClient} = require("@google-cloud/secret-manager");
 const clone = require("rfdc")();
 const nodemailer = require("nodemailer");
 admin.initializeApp();
+//End Globals
 
+//Start matchStudentToMentors
 exports.matchStudentToMentors = functions.https.onCall(async (data, context) => {
 
   //File Operations
@@ -106,6 +109,60 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
 
 });
 
+//Start matchStudentToMentors Helper Methods
+async function match(studentDoc, mentorBundle, usersRef) {
+  await usersRef.doc(studentDoc.id).collection("allowList").doc(mentorBundle.mentorDoc.id).set({"matchWeight": mentorBundle.relativeWeight});
+  await usersRef.doc(mentorBundle.mentorDoc.id).collection("allowList").doc(studentDoc.id).set({"matchWeight": mentorBundle.relativeWeight});
+  await notifyOfMatch(mentorBundle.mentorDoc);
+}
+
+function passesChecks(keys, values, document) {
+  let checksPassed = 0
+
+  for (let i = 0; i < keys.length; i++) {
+    let validValues = values[i].split(" || ");
+
+    for (let validValue of validValues) {
+      if (document.data()[keys[i]] == validValue) {
+        checksPassed++;
+      }
+    }
+  }
+  return checksPassed == keys.length;
+}
+
+async function fetchAndReadAlgorithmMatrix() {
+  return new Promise((resolve) => {
+    https.get("https://docs.google.com/spreadsheets/d/1gndunHC6Ch7F9K_NkhE6OhzpEG9zr0eiIoHjuPsqwOQ/gviz/tq?tqx=out:csv&sheet=PeerGC-Matching-Algorithm.CONFIG", async function (response) {
+      toString(response, function (err, msg) {
+        let lines = msg.split("\n");
+        let scenariosFromFile = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          let line = lines[i];
+          let lineSplit = line.replace(/"/g, "").split(",");
+          scenariosFromFile.push(lineSplit);
+        }
+        resolve(scenariosFromFile);
+      })
+    });
+  });
+}
+//End matchStudentToMentors Helper Methods
+//End matchStudentToMentors
+
+//Start Notification Utilities
+async function notifyOfMatch(doc) {
+  const title = "Hey, you've got a new peer!"
+  const body = "Hey there. We just wanted to let you know that our matching algorithm has found you a new peer! Open up the PeerGC app to check it out."
+
+  const userEmail = (await admin.auth.getUser(doc.id)).email;
+  const userToken = (doc.token)
+
+  await emailNotification(userEmail, title, body);
+  await pushNotification(userToken, title, body);
+}
+
 async function pushNotification(token, title, body) {
   const message = {
     token: token,
@@ -114,7 +171,6 @@ async function pushNotification(token, title, body) {
       body: body
     }
   };
-
   return admin.messaging().send(message)
 }
 
@@ -151,43 +207,3 @@ async function emailNotification(to, subject, body) {
     }
   });
 }
-
-async function match(studentDoc, mentorBundle, usersRef) {
-  await usersRef.doc(studentDoc.id).collection("allowList").doc(mentorBundle.mentorDoc.id).set({"matchWeight": mentorBundle.relativeWeight});
-  await usersRef.doc(mentorBundle.mentorDoc.id).collection("allowList").doc(studentDoc.id).set({"matchWeight": mentorBundle.relativeWeight});
-}
-
-function passesChecks(keys, values, document) {
-  let checksPassed = 0
-
-  for (let i = 0; i < keys.length; i++) {
-    let validValues = values[i].split(" || ");
-
-    for (let validValue of validValues) {
-      if (document.data()[keys[i]] == validValue) {
-        checksPassed++;
-      }
-    }
-  }
-  return checksPassed == keys.length;
-}
-
-async function fetchAndReadAlgorithmMatrix() {
-  return new Promise((resolve) => {
-    https.get("https://docs.google.com/spreadsheets/d/1gndunHC6Ch7F9K_NkhE6OhzpEG9zr0eiIoHjuPsqwOQ/gviz/tq?tqx=out:csv&sheet=PeerGC-Matching-Algorithm.CONFIG", async function (response) {
-      toString(response, function (err, msg) {
-        let lines = msg.split("\n");
-        let scenariosFromFile = [];
-
-        for (let i = 1; i < lines.length; i++) {
-          let line = lines[i];
-          let lineSplit = line.replace(/"/g, "").split(",");
-          scenariosFromFile.push(lineSplit);
-        }
-        resolve(scenariosFromFile);
-      })
-    });
-  });
-}
-
-emailNotification("ajradik@gmail.com", "Test Email From PeerGC", "Thanks for reading!").then(() => {console.log("success")}).catch(() => {console.log("error")})
