@@ -1,30 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BranchesTreeState">
-    <expand>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </expand>
-    <select>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </select>
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="83244dcf-c763-40a4-b023-0e2c9b6327b9" name="Default Changelist" comment="">
+    <list default="true" id="1c4e6864-8e6d-47dc-876b-f6fdfb0e51fe" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/functions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/functions/index.js" afterDir="false" />
     </list>
@@ -36,97 +14,36 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1fplROoA6q9QAwW7Z7FUz4gwtZ5" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="1g1C0743YL6bb47IsyODrLlYnb6" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="javascript.nodejs.core.library.configured.version" value="14.4.0" />
-    <property name="javascript.nodejs.core.library.typings.version" value="14.0.27" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.github/workflows" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
-  </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="Z:\AJ\Documents\Cloud-Functions\.github\workflows" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="Z:\AJ\Documents\Cloud-Functions\.github\workflows" />
-    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="83244dcf-c763-40a4-b023-0e2c9b6327b9" name="Default Changelist" comment="" />
-      <created>1596922906895</created>
+      <changelist id="1c4e6864-8e6d-47dc-876b-f6fdfb0e51fe" name="Default Changelist" comment="" />
+      <created>1597272488768</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1596922906895</updated>
-      <workItem from="1596922908174" duration="3526000" />
-      <workItem from="1596952906186" duration="3454000" />
-      <workItem from="1597009506658" duration="23875000" />
+      <updated>1597272488768</updated>
+      <workItem from="1597272490493" duration="1663000" />
+      <workItem from="1597285856810" duration="4099000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
   <component name="WindowStateProjectService">
-    <state x="1352" y="561" key="#Usage_Scope" timestamp="1597039003136">
+    <state x="1576" y="333" key="run.anything.popup" timestamp="1597288923975">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1352" y="561" key="#Usage_Scope/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597039003136" />
-    <state width="611" height="2" key="GridCell.Tab.0.bottom" timestamp="1597066586188">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="611" height="2" key="GridCell.Tab.0.bottom/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597066586188" />
-    <state width="611" height="2" key="GridCell.Tab.0.center" timestamp="1597066586188">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="611" height="2" key="GridCell.Tab.0.center/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597066586188" />
-    <state width="611" height="2" key="GridCell.Tab.0.left" timestamp="1597066586188">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="611" height="2" key="GridCell.Tab.0.left/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597066586188" />
-    <state width="611" height="2" key="GridCell.Tab.0.right" timestamp="1597066586188">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="611" height="2" key="GridCell.Tab.0.right/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597066586188" />
-    <state x="1037" y="339" key="SettingsEditor" timestamp="1597039005750">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1037" y="339" key="SettingsEditor/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597039005750" />
-    <state x="1577" y="334" key="run.anything.popup" timestamp="1597062776029">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1577" y="334" key="run.anything.popup/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597062776029" />
-    <state x="1583" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1597026105518">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1583" y="320" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597026105518" />
+    <state x="1576" y="333" key="run.anything.popup/0.0.2560.1400/3840.893.1680.1010@0.0.2560.1400" timestamp="1597288923975" />
   </component>
 </project>
