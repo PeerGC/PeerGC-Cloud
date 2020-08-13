@@ -26,10 +26,15 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
     return;
   }
 
+  functions.logger.log("check 0.1")
   const usersRef = admin.firestore().collection("users");
+  functions.logger.log("check 0.2")
   const studentRef = usersRef.doc(uid);
+  functions.logger.log("check 0.3")
   const studentDoc = await studentRef.get();
+  functions.logger.log("check 0.4")
   const mentorDocToRelativeWeight = []
+  functions.logger.log("check 0.5")
   const mentorsQuery = await usersRef.where("accountType", "==", "mentor").get();
 
   functions.logger.log("Check 1")
