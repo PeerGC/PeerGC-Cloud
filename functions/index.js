@@ -12,13 +12,17 @@ admin.initializeApp();
 //Start matchStudentToMentors
 exports.matchStudentToMentors = functions.https.onCall(async (data, context) => {
 
+  functions.logger.log("function called")
+
   //File Operations
   const scenariosFromFile = await fetchAndReadAlgorithmMatrix();
   //End File Operations
 
+  functions.logger.log("check 0")
+
   const uid = context.auth.uid; //LOCAL DEV: const uid = data.uid; PROD: const uid = context.auth.uid;
   if (uid == null) {
-    console.log("User not authenticated.");
+    functions.logger.log("User not authenticated.");
     return;
   }
 
@@ -28,37 +32,37 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
   const mentorDocToRelativeWeight = []
   const mentorsQuery = await usersRef.where("accountType", "==", "mentor").get();
 
-  console.log("Check 1")
+  functions.logger.log("Check 1")
 
   for (let mentorDoc of mentorsQuery.docs) {
     let scenarios = clone(scenariosFromFile);
     let relativeWeight = 0;
 
-    console.log("Check 2")
+    functions.logger.log("Check 2")
 
     for (let scenario of scenarios) {
       //Replace Relative Variables
       for (let i = 0; i < scenario.length; i++) {
         let splitItem = scenario[i].split(" ");
-        console.log(splitItem)
+        functions.logger.log(splitItem)
         if (splitItem[0] == "$MENTOR") {
           scenario[i] = mentorDoc.data()[splitItem[1]];
-          console.log(scenario[i])
+          functions.logger.log(scenario[i])
         }
         else if (splitItem[0] == "$STUDENT") {
           scenario[i] = studentDoc.data()[splitItem[1]];
-          console.log(scenario[i])
+          functions.logger.log(scenario[i])
         }
       }
 
-      console.log("Check 3")
+      functions.logger.log("Check 3")
 
       let mentorKeys = scenario[0].split(" && ");
       let mentorValues = scenario[1].split(" && ");
       let studentKeys = scenario[2].split(" && ");
       let studentValues = scenario[3].split(" && ");
 
-      console.log("Check 4")
+      functions.logger.log("Check 4")
 
       if (passesChecks(mentorKeys, mentorValues, mentorDoc) && passesChecks(studentKeys, studentValues, studentDoc)) {
         relativeWeight += parseInt(scenario[4]);
@@ -68,56 +72,45 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
     mentorDocToRelativeWeight.push({mentorDoc: mentorDoc, relativeWeight: relativeWeight});
   }
 
-  console.log("Check 5")
+  functions.logger.log("Check 5")
 
   mentorDocToRelativeWeight.sort((a, b) => (a.relativeWeight < b.relativeWeight) ? 1 : -1);
 
-  console.log(mentorDocToRelativeWeight.length)
-  console.log("Check 6")
+  functions.logger.log(mentorDocToRelativeWeight.length)
+  functions.logger.log("Check 6")
 
   let highestWeightMentor = mentorDocToRelativeWeight[0];
   let highestWeightNonWhiteMentor;
   let highestWeightNonMaleMentor;
 
-  console.log(highestWeightMentor)
+  functions.logger.log(highestWeightMentor)
 
-  console.log("Check 7")
+  functions.logger.log("Check 7")
 
   for (let entry of mentorDocToRelativeWeight) {
-    console.log("Check 7.1")
+    functions.logger.log("Check 7.1")
     if (entry !== highestWeightMentor && entry !== highestWeightNonWhiteMentor && entry !== highestWeightNonMaleMentor) {
-      console.log("Check 7.2")
+      functions.logger.log("Check 7.2")
       if (entry.mentorDoc.data().race !== "white") {
-        console.log("Check 7.3")
+        functions.logger.log("Check 7.3")
         highestWeightNonWhiteMentor = entry;
       }
       else if (entry.mentorDoc.data().gender !== "male") {
-        console.log("Check 7.4")
+        functions.logger.log("Check 7.4")
         highestWeightNonMaleMentor = entry;
       }
       if (highestWeightNonWhiteMentor !== undefined && highestWeightNonMaleMentor !== undefined) {
-        console.log("Check 7.5")
+        functions.logger.log("Check 7.5")
         break;
       }
     }
   }
 
-  console.log(highestWeightMentor.mentorDoc.id)
-  console.log(highestWeightNonWhiteMentor.mentorDoc.id)
-  console.log(highestWeightNonMaleMentor.mentorDoc.id)
+  functions.logger.log(highestWeightMentor.mentorDoc.id)
+  functions.logger.log(highestWeightNonWhiteMentor.mentorDoc.id)
+  functions.logger.log(highestWeightNonMaleMentor.mentorDoc.id)
 
-  console.log("Check 8")
-
-  if (highestWeightNonWhiteMentor === undefined) {
-    for (let entry of mentorDocToRelativeWeight) {
-      if (entry !== highestWeightMentor && entry !== highestWeightNonWhiteMentor && entry !== highestWeightNonMaleMentor) {
-        highestWeightNonWhiteMentor = entry;
-        break;
-      }
-    }
-  }
-
-  console.log("Check 9")
+  functions.logger.log("Check 9")
 
   if (highestWeightNonMaleMentor === undefined) {
     for (let entry of mentorDocToRelativeWeight) {
@@ -128,23 +121,23 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
     }
   }
 
-  console.log("Check 10")
+  functions.logger.log("Check 10")
 
   if (highestWeightMentor !== undefined) {
-    console.log("Check 11")
+    functions.logger.log("Check 11")
     await match(studentDoc, highestWeightMentor, usersRef);
-    console.log("Check 11.9")
+    functions.logger.log("Check 11.9")
   }
 
-  console.log(highestWeightNonWhiteMentor !== undefined)
+  functions.logger.log(highestWeightNonWhiteMentor !== undefined)
 
   if (highestWeightNonWhiteMentor !== undefined) {
-    console.log("Check 12")
+    functions.logger.log("Check 12")
     await match(studentDoc, highestWeightNonWhiteMentor, usersRef);
   }
 
   if (highestWeightNonMaleMentor !== undefined) {
-    console.log("Check 13")
+    functions.logger.log("Check 13")
     await match(studentDoc, highestWeightNonMaleMentor, usersRef);
   }
 
@@ -152,13 +145,13 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
 
 //Start matchStudentToMentors Helper Methods
 async function match(studentDoc, mentorBundle, usersRef) {
-  console.log("check 11.1")
+  functions.logger.log("check 11.1")
   await usersRef.doc(studentDoc.id).collection("allowList").doc(mentorBundle.mentorDoc.id).set({"matchWeight": mentorBundle.relativeWeight});
-  console.log("check 11.2")
+  functions.logger.log("check 11.2")
   await usersRef.doc(mentorBundle.mentorDoc.id).collection("allowList").doc(studentDoc.id).set({"matchWeight": mentorBundle.relativeWeight});
-  console.log("check 11.3")
+  functions.logger.log("check 11.3")
   //return notifyOfMatch(mentorBundle.mentorDoc);
-  console.log("matched!")
+  functions.logger.log("matched!")
 }
 
 function passesChecks(keys, values, document) {
@@ -168,12 +161,12 @@ function passesChecks(keys, values, document) {
     let validValues = values[i].split(" || ");
 
     for (let validValue of validValues) {
-      if (document.data()[keys[i]] == validValue) {
+      if (document.data()[keys[i]] === validValue) {
         checksPassed++;
       }
     }
   }
-  return checksPassed == keys.length;
+  return checksPassed === keys.length;
 }
 
 async function fetchAndReadAlgorithmMatrix() {
@@ -246,9 +239,9 @@ async function emailNotification(to, subject, body) {
 
   await transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error);
+      functions.logger.log(error);
     } else {
-      console.log('Email sent: ' + info.response);
+      functions.logger.log('Email sent: ' + info.response);
     }
   });
 }
