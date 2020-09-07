@@ -20,7 +20,8 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
 
   functions.logger.log("check 0")
 
-  const uid = context.auth.uid; //LOCAL DEV: const uid = data.uid; PROD: const uid = context.auth.uid;
+  const uid = data.uid; //LOCAL DEV: const uid = data.uid; PROD: const uid = context.auth.uid;
+  functions.logger.log("uid: " + "\"" + uid + "\"")
   if (uid == null) {
     functions.logger.log("User not authenticated.");
     return;
