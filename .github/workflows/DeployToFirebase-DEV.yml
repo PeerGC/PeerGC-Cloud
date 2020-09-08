@@ -1,0 +1,44 @@
+name: Deploy to Firebase-DEV
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+#  build:
+#    name: Build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout Repo
+#        uses: actions/checkout@master
+#      - name: Install Dependencies
+#        working-directory: functions
+#        run: npm install
+#      - name: Build
+#        run: npm build functions
+#      - name: Archive Production Artifact
+#        uses: actions/upload-artifact@master
+#        with:
+#          name: functions
+#          path: functions
+  deploy:
+    name: Deploy
+#    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        working-directory: functions
+        run: npm install
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_DEV }}
