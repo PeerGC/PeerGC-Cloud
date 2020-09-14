@@ -154,21 +154,6 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
         highestWeightNonMaleMentor = entry;
         break;
       }
->>>>>>> Stashed changes
-    }
-  }
-
-  if (amtPerUser <= 0) {
-    return { success: true };
-  }
-  // End Query1
-
-
-  return { success: false };
-
-});
-<<<<<<< Updated upstream
-=======
 
 //Start matchStudentToMentors Helper Methods
 async function match(studentDoc, mentorBundle, usersRef) {
@@ -273,4 +258,3 @@ async function emailNotification(to, subject, body) {
     }
   });
 }
->>>>>>> Stashed changes
