@@ -1,14 +1,46 @@
-//Start Globals
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-const https = require("https");
-const toString = require("stream-to-string");
-const {SecretManagerServiceClient} = require("@google-cloud/secret-manager");
-const clone = require("rfdc")();
-const nodemailer = require("nodemailer");
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 admin.initializeApp();
-//End Globals
 
+<<<<<<< Updated upstream
+exports.setCards = functions.https.onCall(async (data) => {
+
+  console.log("Host User ID: " + data.uid)
+
+  const usersRef = admin.firestore().collection("users")
+  const docRef = usersRef.doc(data.uid)
+  const uidDoc = await docRef.get();
+
+  const accountType = uidDoc.data().accountType;
+  const value = uidDoc.data().value;
+  const gender = uidDoc.data().gender;
+  const interest = uidDoc.data().interest;
+  const race = uidDoc.data().race;
+
+  var liveWhiteList = []
+
+  // Start Query1
+  const query1 = await usersRef
+  .where("accountType", "==", otherAccountType)
+  .where("gender", "==", gender)
+  .where("interest", "==", interest)
+  .where("race", "==", race)
+  .where("value", "<", doubleMax)
+  .where("value", ">", doubleMin)
+  .orderBy("value")
+  .limit(amtPerUser)
+  .get();
+//test change
+  //test change 2
+  //test change 3
+  for(doc of query1.docs) {
+    console.log("QUERY 1: " + doc.id);
+    if(!liveWhiteList.includes(doc.id)) {
+      const updateCurrentUserDocWhitelist = await docRef.collection("whitelist").doc(doc.id).set({});
+      const updateRemoteUserDocWhitelist = await usersRef.doc(doc.id).collection("whitelist").doc(data.uid).set({});
+      liveWhiteList.push(doc.id);
+      amtPerUser--;
+=======
 //Start matchStudentToMentors
 exports.matchStudentToMentors = functions.https.onCall(async (data, context) => {
 
@@ -28,7 +60,7 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
   }
 
   functions.logger.log("check 0.1")
-  const usersRef = admin.firestore().collection("users");
+  const usersRef = admin.firestore().collection("Users");
   functions.logger.log("check 0.2")
   const studentRef = usersRef.doc(uid);
   functions.logger.log("check 0.3")
@@ -36,7 +68,7 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
   functions.logger.log("check 0.4")
   const mentorDocToRelativeWeight = []
   functions.logger.log("check 0.5")
-  const mentorsQuery = await usersRef.where("accountType", "==", "mentor").get();
+  const mentorsQuery = await usersRef.where("Account_Type", "==", "mentor").get();
 
   functions.logger.log("Check 1")
 
@@ -97,11 +129,11 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
     functions.logger.log("Check 7.1")
     if (entry !== highestWeightMentor && entry !== highestWeightNonWhiteMentor && entry !== highestWeightNonMaleMentor) {
       functions.logger.log("Check 7.2")
-      if (entry.mentorDoc.data().race !== "white") {
+      if (entry.mentorDoc.data().Race !== "white") {
         functions.logger.log("Check 7.3")
         highestWeightNonWhiteMentor = entry;
       }
-      else if (entry.mentorDoc.data().gender !== "male") {
+      else if (entry.mentorDoc.data().Gender !== "male") {
         functions.logger.log("Check 7.4")
         highestWeightNonMaleMentor = entry;
       }
@@ -124,37 +156,28 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
         highestWeightNonMaleMentor = entry;
         break;
       }
+>>>>>>> Stashed changes
     }
   }
 
-  functions.logger.log("Check 10")
-
-  if (highestWeightMentor !== undefined) {
-    functions.logger.log("Check 11")
-    await match(studentDoc, highestWeightMentor, usersRef);
-    functions.logger.log("Check 11.9")
+  if (amtPerUser <= 0) {
+    return { success: true };
   }
+  // End Query1
 
-  functions.logger.log(highestWeightNonWhiteMentor !== undefined)
 
-  if (highestWeightNonWhiteMentor !== undefined) {
-    functions.logger.log("Check 12")
-    await match(studentDoc, highestWeightNonWhiteMentor, usersRef);
-  }
-
-  if (highestWeightNonMaleMentor !== undefined) {
-    functions.logger.log("Check 13")
-    await match(studentDoc, highestWeightNonMaleMentor, usersRef);
-  }
+  return { success: false };
 
 });
+<<<<<<< Updated upstream
+=======
 
 //Start matchStudentToMentors Helper Methods
 async function match(studentDoc, mentorBundle, usersRef) {
   functions.logger.log("check 11.1")
-  await usersRef.doc(studentDoc.id).collection("allowList").doc(mentorBundle.mentorDoc.id).set({"matchWeight": mentorBundle.relativeWeight});
+  await usersRef.doc(studentDoc.id).collection("Allow_List").doc(mentorBundle.mentorDoc.id).set({"Match_Weight": mentorBundle.relativeWeight});
   functions.logger.log("check 11.2")
-  await usersRef.doc(mentorBundle.mentorDoc.id).collection("allowList").doc(studentDoc.id).set({"matchWeight": mentorBundle.relativeWeight});
+  await usersRef.doc(mentorBundle.mentorDoc.id).collection("Allow_List").doc(studentDoc.id).set({"Match_Weight": mentorBundle.relativeWeight});
   functions.logger.log("check 11.3")
   //return notifyOfMatch(mentorBundle.mentorDoc);
   functions.logger.log("matched!")
@@ -251,3 +274,4 @@ async function emailNotification(to, subject, body) {
     }
   });
 }
+>>>>>>> Stashed changes
