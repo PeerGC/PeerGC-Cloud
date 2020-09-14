@@ -1,6 +1,13 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+//Start Globals
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const https = require("https");
+const toString = require("stream-to-string");
+const {SecretManagerServiceClient} = require("@google-cloud/secret-manager");
+const clone = require("rfdc")();
+const nodemailer = require("nodemailer");
 admin.initializeApp();
+//End Globals
 
 //Start matchStudentToMentors
 exports.matchStudentToMentors = functions.https.onCall(async (data, context) => {
@@ -117,6 +124,30 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
         highestWeightNonMaleMentor = entry;
         break;
       }
+    }
+  }
+
+  functions.logger.log("Check 10")
+
+  if (highestWeightMentor !== undefined) {
+    functions.logger.log("Check 11")
+    await match(studentDoc, highestWeightMentor, usersRef);
+    functions.logger.log("Check 11.9")
+  }
+
+  functions.logger.log(highestWeightNonWhiteMentor !== undefined)
+
+  if (highestWeightNonWhiteMentor !== undefined) {
+    functions.logger.log("Check 12")
+    await match(studentDoc, highestWeightNonWhiteMentor, usersRef);
+  }
+
+  if (highestWeightNonMaleMentor !== undefined) {
+    functions.logger.log("Check 13")
+    await match(studentDoc, highestWeightNonMaleMentor, usersRef);
+  }
+
+});
 
 //Start matchStudentToMentors Helper Methods
 async function match(studentDoc, mentorBundle, usersRef) {
