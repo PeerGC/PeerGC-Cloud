@@ -1,14 +1,44 @@
-//Start Globals
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-const https = require("https");
-const toString = require("stream-to-string");
-const {SecretManagerServiceClient} = require("@google-cloud/secret-manager");
-const clone = require("rfdc")();
-const nodemailer = require("nodemailer");
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 admin.initializeApp();
-//End Globals
 
+exports.setCards = functions.https.onCall(async (data) => {
+
+  console.log("Host User ID: " + data.uid)
+
+  const usersRef = admin.firestore().collection("users")
+  const docRef = usersRef.doc(data.uid)
+  const uidDoc = await docRef.get();
+
+  const accountType = uidDoc.data().accountType;
+  const value = uidDoc.data().value;
+  const gender = uidDoc.data().gender;
+  const interest = uidDoc.data().interest;
+  const race = uidDoc.data().race;
+
+  var liveWhiteList = []
+
+  // Start Query1
+  const query1 = await usersRef
+  .where("accountType", "==", otherAccountType)
+  .where("gender", "==", gender)
+  .where("interest", "==", interest)
+  .where("race", "==", race)
+  .where("value", "<", doubleMax)
+  .where("value", ">", doubleMin)
+  .orderBy("value")
+  .limit(amtPerUser)
+  .get();
+//test change
+  //test change 2
+  //test change 3
+  for(doc of query1.docs) {
+    console.log("QUERY 1: " + doc.id);
+    if(!liveWhiteList.includes(doc.id)) {
+      const updateCurrentUserDocWhitelist = await docRef.collection("whitelist").doc(doc.id).set({});
+      const updateRemoteUserDocWhitelist = await usersRef.doc(doc.id).collection("whitelist").doc(data.uid).set({});
+      liveWhiteList.push(doc.id);
+      amtPerUser--;
 //Start matchStudentToMentors
 exports.matchStudentToMentors = functions.https.onCall(async (data, context) => {
 
@@ -124,30 +154,6 @@ exports.matchStudentToMentors = functions.https.onCall(async (data, context) => 
         highestWeightNonMaleMentor = entry;
         break;
       }
-    }
-  }
-
-  functions.logger.log("Check 10")
-
-  if (highestWeightMentor !== undefined) {
-    functions.logger.log("Check 11")
-    await match(studentDoc, highestWeightMentor, usersRef);
-    functions.logger.log("Check 11.9")
-  }
-
-  functions.logger.log(highestWeightNonWhiteMentor !== undefined)
-
-  if (highestWeightNonWhiteMentor !== undefined) {
-    functions.logger.log("Check 12")
-    await match(studentDoc, highestWeightNonWhiteMentor, usersRef);
-  }
-
-  if (highestWeightNonMaleMentor !== undefined) {
-    functions.logger.log("Check 13")
-    await match(studentDoc, highestWeightNonMaleMentor, usersRef);
-  }
-
-});
 
 //Start matchStudentToMentors Helper Methods
 async function match(studentDoc, mentorBundle, usersRef) {
@@ -184,6 +190,7 @@ async function fetchAndReadAlgorithmMatrix() {
 
         for (let i = 1; i < lines.length; i++) {
           let line = lines[i];
+          let lineSplit = line.replace(/"/g, "").split(",");
           let lineSplit = line.replace(/"/g, "").split(",");
           scenariosFromFile.push(lineSplit);
         }
