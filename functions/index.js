@@ -2,7 +2,6 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-<<<<<<< Updated upstream
 exports.setCards = functions.https.onCall(async (data) => {
 
   console.log("Host User ID: " + data.uid)
@@ -40,7 +39,6 @@ exports.setCards = functions.https.onCall(async (data) => {
       const updateRemoteUserDocWhitelist = await usersRef.doc(doc.id).collection("whitelist").doc(data.uid).set({});
       liveWhiteList.push(doc.id);
       amtPerUser--;
-=======
 //Start matchStudentToMentors
 exports.matchStudentToMentors = functions.https.onCall(async (data, context) => {
 
@@ -207,6 +205,7 @@ async function fetchAndReadAlgorithmMatrix() {
 
         for (let i = 1; i < lines.length; i++) {
           let line = lines[i];
+          let lineSplit = line.replace(/"/g, "").split(",");
           let lineSplit = line.replace(/"/g, "").split(",");
           scenariosFromFile.push(lineSplit);
         }
